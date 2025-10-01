@@ -1,9 +1,15 @@
 import IntroSearch from "./ui/IntroSearch";
+import LandingUi from "./ui/landingui";
 
 export default function Home({
   searchParams,
 }: {
   searchParams: { term?: string };
 }) {
-  return <IntroSearch searchParams={searchParams} />;
+  return (
+    <>
+      <LandingUi />
+      <IntroSearch searchParams={searchParams} />
+    </>
+  );
 }
