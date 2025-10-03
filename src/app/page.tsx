@@ -1,15 +1,19 @@
+import Footer from "./footer";
 import IntroSearch from "./ui/IntroSearch";
 import LandingUi from "./ui/landingui";
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { term?: string };
-}) {
+type PageProps = {
+  searchParams?: {
+    term?: string;
+  };
+};
+
+export default function Home({ searchParams }: PageProps) {
   return (
     <>
       <LandingUi />
-      <IntroSearch searchParams={searchParams} />
+      <IntroSearch searchParams={searchParams ?? {}} />
+      <Footer />
     </>
   );
 }

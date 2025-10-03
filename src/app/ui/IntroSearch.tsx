@@ -11,16 +11,14 @@ type Track = {
 };
 
 type IntroSearchProps = {
-  searchParams: { term?: string };
+  searchParams?: { term?: string }; 
 };
 
 export default function IntroSearch({ searchParams }: IntroSearchProps) {
-  // Default search term is Burna Boy
   const [searchTerm, setSearchTerm] = useState(searchParams?.term || "Burna Boy");
   const [results, setResults] = useState<Track[]>([]);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
-  // Fetch tracks when searchTerm changes
   useEffect(() => {
     if (!searchTerm) return;
 
@@ -61,8 +59,8 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
             </div>
           </div>
 
-          {/* Results */}
-          <ul className="space-y-4 lg:w-dvh mx-auto">
+       
+          <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
             {results.map((track) => (
               <li key={track.trackId} className="border-b pb-3">
                 <div className="font-bold text-white">{track.trackName}</div>
@@ -73,7 +71,6 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
                     src={track.previewUrl}
                     className="mt-2 w-full"
                     onPlay={(e) => {
-                      // Pause previous audio if another track is playing
                       if (currentAudio && currentAudio !== e.currentTarget) {
                         currentAudio.pause();
                       }
