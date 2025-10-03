@@ -2,17 +2,22 @@ import Footer from "./footer";
 import IntroSearch from "./ui/IntroSearch";
 import LandingUi from "./ui/landingui";
 
-type PageProps = {
-  searchParams?: {
-    term?: string;
-  };
+type SearchParams = {
+  term?: string;
 };
 
-export default function Home({ searchParams }: PageProps) {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: Promise<SearchParams>;
+}) {
+  // Await searchParams because it's a Promise in Next.js 15
+  const params = (await searchParams) ?? {};
+
   return (
     <>
       <LandingUi />
-      <IntroSearch searchParams={searchParams ?? {}} />
+      <IntroSearch searchParams={params} />
       <Footer />
     </>
   );
