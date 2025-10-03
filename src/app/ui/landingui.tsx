@@ -60,13 +60,16 @@ export default function LandingUi() {
       <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-6">
     
         <div className="backdrop-blur-sm bg-black/40 px-6 py-4 rounded-lg text-center">
-          <h1 className="lg:text-7xl sm:text-2xl font-bold text-gray-300">
+          <h1 className="lg:text-5xl sm:text-2xl font-bold text-gray-300">
             Welcome to My Music App <br />
             <span className="block mt-4 lg:ml-10">
-              Discover Your Favorite Songs & Artists
+              Discover Your Favorite Songs, Artists and Podcasts
             </span>
           </h1>
 
+            <div className="mx-auto">
+              <h2 className=" text-3xl my-4 text-amber-600">Here are Top 10 Songs Trending </h2>
+            </div>
 
           {songs.length > 0 && (
           <div className="flex flex-col items-center space-y-4">
