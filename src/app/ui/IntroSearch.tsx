@@ -24,12 +24,26 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
 
     const fetchTracks = async () => {
       try {
+      
         const response = await axios.get("https://itunes.apple.com/search", {
-          params: { term: searchTerm, media: "music", limit: 3 },
+          params: { 
+            term: encodeURIComponent(searchTerm), 
+            media: "music", 
+            limit: 3 
+          },
         });
         setResults(response.data.results);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.warn("Direct request failed, retrying with proxy...", error);
+        try {
+          
+          const proxyResponse = await axios.get(
+            `https://corsproxy.io/?https://itunes.apple.com/search?term=${encodeURIComponent(searchTerm)}&media=music&limit=3`
+          );
+          setResults(proxyResponse.data.results);
+        } catch (proxyError) {
+          console.error("Error fetching data (proxy also failed):", proxyError);
+        }
       }
     };
 
@@ -40,7 +54,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
     <div>
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
-          {/* Search Bar */}
+        
           <div className="flex justify-center">
             <div className="relative lg:w-dvh mt-10">
               <input
