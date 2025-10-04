@@ -4,12 +4,13 @@ import { Search } from "lucide-react";
 import axios from "axios";
 
 type Result = {
-  trackId?: number;     
+  trackId?: number;      
   artistId?: number;
   trackName?: string;
-  artistName: string;
+  artistName?: string;
   previewUrl?: string;
-  wrapperType: string;  
+  wrapperType?: string;   
+  kind?: string; // fallback when wrapperType is missing
 };
 
 type IntroSearchProps = {
@@ -31,14 +32,15 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
           {
             params: {
               term: query,
-              entity: "musicTrack,musicArtist", 
+              entity: "musicTrack,musicArtist",
               limit: 8,
             },
           }
         );
-        setResults(response.data.results);
+        setResults(response.data.results || []);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setResults([]);
       }
     };
 
@@ -50,7 +52,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
 
-        
+          {/* Search bar */}
           <div className="flex justify-center mt-10">
             <div className="flex w-full max-w-lg">
               <input
@@ -69,35 +71,50 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
             </div>
           </div>
 
-        
+          {/* Results */}
           <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
-            {results.map((item) => (
-              <li
-                key={item.trackId || item.artistId}
-                className="border-b pb-3 flex flex-col md:flex-row md:items-center md:justify-between"
-              >
-                <div>
-                  {item.wrapperType === "artist" ? (
-                    <>
-                      <div className="font-bold text-pink-400">Artist</div>
-                      <div className="text-white font-bold">{item.artistName}</div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="font-bold text-white">{item.trackName}</div>
-                      <div className="text-sm font-bold text-white">{item.artistName}</div>
-                    </>
+            {results.length === 0 && (
+              <li className="text-white text-center mt-4">No results found</li>
+            )}
+            {results.map((item) => {
+              const isArtist =
+                item.wrapperType === "artist" ||
+                (!item.trackName && item.artistName);
+
+              return (
+                <li
+                  key={item.trackId || item.artistId}
+                  className="border-b pb-3 flex flex-col md:flex-row md:items-center md:justify-between"
+                >
+                  <div>
+                    {isArtist ? (
+                      <>
+                        <div className="font-bold text-pink-400">Artist</div>
+                        <div className="text-white font-bold">
+                          {item.artistName || "Unknown Artist"}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-bold text-white">
+                          {item.trackName || "Untitled Track"}
+                        </div>
+                        <div className="text-sm font-bold text-white">
+                          {item.artistName || "Unknown Artist"}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {!isArtist && item.previewUrl && (
+                    <audio
+                      controls
+                      src={item.previewUrl}
+                      className="mt-2 w-full md:w-48"
+                    />
                   )}
-                </div>
-                {item.wrapperType === "track" && item.previewUrl && (
-                  <audio
-                    controls
-                    src={item.previewUrl}
-                    className="mt-2 w-full md:w-48"
-                  />
-                )}
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
