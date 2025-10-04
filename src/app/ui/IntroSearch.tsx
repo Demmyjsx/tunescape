@@ -61,7 +61,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
     <div>
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
-          {/* Search Bar */}
+        
           <div className="flex justify-center">
             <div className="relative lg:w-dvh mt-10">
               <input
@@ -80,7 +80,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
             </div>
           </div>
 
-          {/* Results */}
+         
           <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
             {results.map((track) => (
               <li key={track.trackId} className="border-b pb-3 flex items-center justify-between">
