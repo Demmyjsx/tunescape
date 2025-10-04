@@ -11,37 +11,28 @@ type Track = {
 };
 
 type IntroSearchProps = {
-  searchParams?: { term?: string }; 
+  searchParams?: { term?: string };
 };
 
 export default function IntroSearch({ searchParams }: IntroSearchProps) {
-  const [searchTerm, setSearchTerm] = useState(searchParams?.term || ""); 
+  const [searchTerm, setSearchTerm] = useState(searchParams?.term || "");
   const [results, setResults] = useState<Track[]>([]);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (!searchTerm) return; 
+    if (!searchTerm) return;
 
     const fetchTracks = async () => {
       try {
-        const response = await axios.get("https://itunes.apple.com/search", {
-          params: { 
-            term: encodeURIComponent(searchTerm), 
-            media: "music", 
-            limit: 3 
-          },
-        });
+        // Always use proxy to avoid CORS issues (especially on mobile)
+        const response = await axios.get(
+          `https://corsproxy.io/?https://itunes.apple.com/search?term=${encodeURIComponent(
+            searchTerm
+          )}&media=music&limit=3`
+        );
         setResults(response.data.results);
       } catch (error) {
-        console.warn("Direct request failed, retrying with proxy...", error);
-        try {
-          const proxyResponse = await axios.get(
-            `https://corsproxy.io/?https://itunes.apple.com/search?term=${encodeURIComponent(searchTerm)}&media=music&limit=3`
-          );
-          setResults(proxyResponse.data.results);
-        } catch (proxyError) {
-          console.error("Error fetching data (proxy also failed):", proxyError);
-        }
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -52,7 +43,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
     <div>
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
-        
+          {/* Search Bar */}
           <div className="flex justify-center">
             <div className="relative lg:w-dvh mt-10">
               <input
@@ -71,7 +62,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
             </div>
           </div>
 
-          
+          {/* Search Results */}
           <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
             {results.map((track) => (
               <li key={track.trackId} className="border-b pb-3">
