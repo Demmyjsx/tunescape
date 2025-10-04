@@ -74,7 +74,7 @@ export default function LandingUi() {
           {songs.length > 0 && (
           <div className="flex flex-col items-center space-y-4">
             <Image
-              src={songs[currentIndex]["im:image"][2].label} // large image
+              src={songs[currentIndex]["im:image"][2].label}
               alt={songs[currentIndex]["im:name"].label}
               width={170}
               height={170}
