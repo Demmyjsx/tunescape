@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import axios from "axios";
 
-type Track = {
-  trackId: number;
-  trackName: string;
+type Result = {
+  trackId?: number;     
+  artistId?: number;
+  trackName?: string;
   artistName: string;
-  previewUrl: string;
+  previewUrl?: string;
+  wrapperType: string;  
 };
 
 type IntroSearchProps = {
@@ -17,17 +19,22 @@ type IntroSearchProps = {
 export default function IntroSearch({ searchParams }: IntroSearchProps) {
   const [searchTerm, setSearchTerm] = useState(searchParams?.term || "asake"); 
   const [query, setQuery] = useState(searchParams?.term || "asake"); 
-  const [results, setResults] = useState<Track[]>([]);
+  const [results, setResults] = useState<Result[]>([]);
 
   useEffect(() => {
     if (!query) return;
 
-    const fetchTracks = async () => {
+    const fetchResults = async () => {
       try {
         const response = await axios.get(
-          `https://corsproxy.io/?https://itunes.apple.com/search?term=${encodeURIComponent(
-            query
-          )}&media=music&limit=5`
+          `https://corsproxy.io/?https://itunes.apple.com/search`,
+          {
+            params: {
+              term: query,
+              entity: "musicTrack,musicArtist", 
+              limit: 8,
+            },
+          }
         );
         setResults(response.data.results);
       } catch (error) {
@@ -35,14 +42,15 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
       }
     };
 
-    fetchTracks();
+    fetchResults();
   }, [query]);
 
   return (
     <div>
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
-    
+
+        
           <div className="flex justify-center mt-10">
             <div className="flex w-full max-w-lg">
               <input
@@ -61,21 +69,30 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
             </div>
           </div>
 
-          
+        
           <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
-            {results.map((track) => (
+            {results.map((item) => (
               <li
-                key={track.trackId}
+                key={item.trackId || item.artistId}
                 className="border-b pb-3 flex flex-col md:flex-row md:items-center md:justify-between"
               >
                 <div>
-                  <div className="font-bold text-white">{track.trackName}</div>
-                  <div className="text-sm font-bold text-white">{track.artistName}</div>
+                  {item.wrapperType === "artist" ? (
+                    <>
+                      <div className="font-bold text-pink-400">Artist</div>
+                      <div className="text-white font-bold">{item.artistName}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="font-bold text-white">{item.trackName}</div>
+                      <div className="text-sm font-bold text-white">{item.artistName}</div>
+                    </>
+                  )}
                 </div>
-                {track.previewUrl && (
+                {item.wrapperType === "track" && item.previewUrl && (
                   <audio
                     controls
-                    src={track.previewUrl}
+                    src={item.previewUrl}
                     className="mt-2 w-full md:w-48"
                   />
                 )}
