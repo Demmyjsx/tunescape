@@ -16,16 +16,17 @@ type IntroSearchProps = {
 
 export default function IntroSearch({ searchParams }: IntroSearchProps) {
   const [searchTerm, setSearchTerm] = useState(searchParams?.term || "asake"); 
+  const [query, setQuery] = useState(searchParams?.term || "asake"); 
   const [results, setResults] = useState<Track[]>([]);
 
   useEffect(() => {
-    if (!searchTerm) return;
+    if (!query) return;
 
     const fetchTracks = async () => {
       try {
         const response = await axios.get(
           `https://corsproxy.io/?https://itunes.apple.com/search?term=${encodeURIComponent(
-            searchTerm
+            query
           )}&media=music&limit=5`
         );
         setResults(response.data.results);
@@ -35,32 +36,32 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
     };
 
     fetchTracks();
-  }, [searchTerm]);
+  }, [query]);
 
   return (
     <div>
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
-         
-          <div className="flex justify-center">
-            <div className="relative lg:w-dvh mt-10">
+    
+          <div className="flex justify-center mt-10">
+            <div className="flex w-full max-w-lg">
               <input
                 type="search"
                 placeholder="Enter song title or artist"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full text-white font-extrabold rounded-lg border border-gray-300 bg-transparent px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-pink-500"
+                className="flex-1 text-white font-extrabold rounded-l-lg border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-pink-500"
               />
               <button
-                onClick={() => setSearchTerm(searchTerm)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                onClick={() => setQuery(searchTerm)}
+                className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-r-lg flex items-center justify-center"
               >
                 <Search size={18} />
               </button>
             </div>
           </div>
 
-         
+          
           <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
             {results.map((track) => (
               <li
