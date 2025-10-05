@@ -53,7 +53,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
         <div className="space-y-6">
          
           <div className="flex justify-center mt-10">
-            <div className="flex w-full max-w-lg">
+            <div className="flex w-1/2 md:w-full max-w-lg">
               <input
                 type="search"
                 placeholder="Enter song title or artist"
