@@ -10,7 +10,7 @@ type Result = {
   artistName?: string;
   previewUrl?: string;
   wrapperType?: string;   
-  kind?: string; // fallback when wrapperType is missing
+  kind?: string;
 };
 
 type IntroSearchProps = {
@@ -27,17 +27,17 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
 
     const fetchResults = async () => {
       try {
+        // Use AllOrigins proxy for Safari
+        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
+          query
+        )}&entity=musicTrack,musicArtist&limit=8`;
+
         const response = await axios.get(
-          `https://corsproxy.io/?https://itunes.apple.com/search`,
-          {
-            params: {
-              term: query,
-              entity: "musicTrack,musicArtist",
-              limit: 8,
-            },
-          }
+          `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
         );
-        setResults(response.data.results || []);
+
+        const data = JSON.parse(response.data.contents);
+        setResults(data.results || []);
       } catch (error) {
         console.error("Error fetching data:", error);
         setResults([]);
@@ -51,8 +51,7 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
     <div>
       <div className="bg-hero mx-auto h-screen">
         <div className="space-y-6">
-
-          {/* Search bar */}
+         
           <div className="flex justify-center mt-10">
             <div className="flex w-full max-w-lg">
               <input
@@ -71,7 +70,6 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
             </div>
           </div>
 
-          {/* Results */}
           <ul className="space-y-4 lg:w-dvh mx-10 md:mx-auto">
             {results.length === 0 && (
               <li className="text-white text-center mt-4">No results found</li>
