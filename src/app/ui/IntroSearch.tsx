@@ -27,10 +27,10 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
 
     const fetchResults = async () => {
       try {
-        // Use AllOrigins proxy for Safari
+        
         const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
           query
-        )}&entity=musicTrack,musicArtist&limit=8`;
+        )}&entity=musicTrack,musicArtist&limit=4`;
 
         const response = await axios.get(
           `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
