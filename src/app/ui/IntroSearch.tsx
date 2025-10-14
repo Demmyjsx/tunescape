@@ -49,15 +49,22 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <div className="bg-hero mx-auto min-h-screen relative overflow-hidden">
-        {/* Animated background elements */}
+     
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute top-20 left-10 w-72 h-72 bg-pink-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         
         <div className="relative z-10 space-y-8 pt-20 px-4">
-          {/* Header */}
+         
           <div className="text-center space-y-4">
-            <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 animate-gradient">
+            <h1 
+              className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 animate-gradient-shift bg-200"
+              style={{
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundSize: '200% 200%'
+              }}
+            >
               TuneScape
             </h1>
             <p className="text-lg md:text-xl text-white/80 font-medium">
@@ -67,7 +74,10 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
          
           <div className="flex justify-center">
             <div className="relative w-full max-w-2xl">
-              <div className="flex backdrop-blur-lg bg-white/10 rounded-2xl border border-white/20 shadow-2xl overflow-hidden hover:shadow-pink-500/20 transition-all duration-300">
+              <div className="flex backdrop-blur-lg bg-white/10 rounded-2xl border border-white/20 shadow-2xl overflow-hidden hover:shadow-pink-500/20 transition-all duration-300" style={{
+                WebkitBackdropFilter: 'blur(16px)',
+                backdropFilter: 'blur(16px)'
+              }}>
                 <input
                   type="search"
                   placeholder="Search for songs, artists, albums..."
@@ -88,14 +98,14 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
                   )}
                 </button>
               </div>
-              {/* Search suggestions hint */}
+              
               <div className="absolute -bottom-8 left-0 right-0 text-center">
                 <p className="text-sm text-white/50">Press Enter to search or click the search button</p>
               </div>
             </div>
           </div>
 
-          {/* Results Section */}
+      
           <div className="max-w-4xl mx-auto px-4 pb-20">
             {loading && (
               <div className="flex flex-col items-center justify-center py-16 space-y-4">
@@ -137,8 +147,12 @@ export default function IntroSearch({ searchParams }: IntroSearchProps) {
                 return (
                   <div
                     key={item.trackId || item.artistId}
-                    className="backdrop-blur-lg bg-white/5 rounded-2xl border border-white/10 p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10 group fade-in-up"
-                    style={{ animationDelay: `${index * 100}ms` }}
+                    className="backdrop-blur-lg bg-white/5 rounded-2xl border border-white/10 p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10 group animate-fade-in-up"
+                    style={{ 
+                      animationDelay: `${index * 100}ms`,
+                      WebkitBackdropFilter: 'blur(16px)',
+                      backdropFilter: 'blur(16px)'
+                    }}
                   >
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                       <div className="flex-1">

@@ -52,14 +52,24 @@ export default function LandingUi() {
         muted
         loop
         playsInline
+        webkit-playsinline="true"
+        preload="metadata"
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+        style={{ 
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)'
+        }}
       >
         <source src="/bgvid.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
       </video>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-6">
     
-        <div className="backdrop-blur-sm bg-black/40 px-6 py-4 rounded-lg text-center">
+        <div className="backdrop-blur-sm bg-black/40 px-6 py-4 rounded-lg text-center" style={{
+          WebkitBackdropFilter: 'blur(4px)',
+          backdropFilter: 'blur(4px)'
+        }}>
           <h1 className="lg:text-5xl sm:text-2xl font-bold text-gray-300">
             Welcome to My Music App <br />
             <span className="block mt-4 lg:ml-10">

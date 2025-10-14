@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; TuneScape/1.0)',
       },
+      cache: 'no-cache'
     });
 
     if (!response.ok) {
@@ -23,7 +25,14 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    
+    // Create response with proper headers for Safari compatibility
+    const jsonResponse = NextResponse.json(data);
+    jsonResponse.headers.set('Access-Control-Allow-Origin', '*');
+    jsonResponse.headers.set('Access-Control-Allow-Methods', 'GET');
+    jsonResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    return jsonResponse;
   } catch (error) {
     console.error('Error fetching iTunes data:', error);
     return NextResponse.json(
